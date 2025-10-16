@@ -141,10 +141,13 @@ Visit <http://localhost:3000> to explore the hero experience, theme toggle, and 
 - **.dockerignore** – Excludes caches, env files, editor configs for lean images.
 - **compose.yaml** – Launches the app alongside a demo OpenTelemetry Collector (`ops/otel-collector.yaml`).
 
-## CI pipeline
+## CI & release pipeline
 
-- `.github/workflows/ci.yml` runs lint, test, type-check, build on pushes/PRs to `main`.
-- Extend the workflow with deployment jobs (Docker registry push, Vercel CLI, etc.).
+- `.github/workflows/ci.yml` runs lint, test, type-check, and build on pushes/PRs to `main`.
+- A manual job (`workflow_dispatch`) triggers semantic-release. It:
+  - runs `pnpm release` to bump versions, update `CHANGELOG.md`, tag the repo, and open a GitHub release with generated notes.
+  - deploys to Vercel using `vercel/action@v2`. Provide repo secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` with the values from your Vercel project.
+- Release notes use conventional commits; the GitHub release title matches the version and the description mirrors the generated changelog.
 
 ## Authentication demo
 
@@ -203,6 +206,9 @@ Suggested flow:
 | `NEXT_PUBLIC_FEATURE_FLAGS`                      | JSON / key:value          | —                       | Client-visible flag overrides.                            |
 | `NEXT_PUBLIC_OTEL_EXPORTER_OTLP_ENDPOINT`        | URL                       | —                       | Browser OTLP endpoint (optional).                         |
 | `NEXT_PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | URL                       | —                       | Browser trace-specific endpoint.                          |
+| `VERCEL_TOKEN`                                   | secret                    | —                       | Required for release job to deploy via Vercel.            |
+| `VERCEL_ORG_ID`                                  | secret                    | —                       | Vercel organization ID for deployment.                    |
+| `VERCEL_PROJECT_ID`                              | secret                    | —                       | Vercel project ID for deployment.                         |
 
 See `.env.example` for a starter template.
 
