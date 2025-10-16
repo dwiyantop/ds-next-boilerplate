@@ -1,27 +1,83 @@
 {
-  "name": "gag-world",
+  "name": "dsnext",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.12.2",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --ext ts,tsx --max-warnings=0",
+    "test": "cross-env VITE_CJS_IGNORE_WARNING=1 vitest run",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky",
+    "perf": "lhci autorun --config=./lighthouserc.json",
+    "commit": "cz"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/api-logs": "^0.54.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.54.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.54.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.54.0",
+    "@opentelemetry/instrumentation": "^0.54.0",
+    "@opentelemetry/instrumentation-http": "^0.54.0",
+    "@opentelemetry/resources": "^1.23.0",
+    "@opentelemetry/sdk-logs": "^0.54.0",
+    "@opentelemetry/sdk-metrics": "^1.23.0",
+    "@opentelemetry/sdk-trace-base": "^1.23.0",
+    "@opentelemetry/sdk-trace-node": "^1.23.0",
+    "@opentelemetry/sdk-trace-web": "^1.23.0",
+    "@opentelemetry/semantic-conventions": "^1.23.0",
+    "clsx": "^2.1.1",
+    "import-in-the-middle": "^1.6.1",
+    "ky": "^1.7.3",
+    "next": "15.5.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.5"
+    "require-in-the-middle": "^7.1.1",
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^3.1.1",
+    "web-vitals": "^5.1.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
+    "@eslint/eslintrc": "^3.1.0",
+    "@lhci/cli": "^0.14.0",
+    "@types/node": "^22.9.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "autoprefixer": "^10.4.20",
+    "commitizen": "^4.3.1",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.16.0",
     "eslint-config-next": "15.5.5",
-    "@eslint/eslintrc": "^3"
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss}": "prettier --write"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

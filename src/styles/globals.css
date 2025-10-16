@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 233 40% 97%;
+  --foreground: 234 44% 14%;
+  --primary: 234 44% 18%;
+  --secondary: 334 74% 78%;
+  --accent: 334 74% 68%;
+  --muted: 234 20% 62%;
+  --surface: 234 44% 99%;
+}
+
+.dark {
+  --background: 234 35% 12%;
+  --foreground: 231 48% 95%;
+  --primary: 234 35% 18%;
+  --secondary: 335 74% 68%;
+  --accent: 335 80% 70%;
+  --muted: 234 16% 65%;
+  --surface: 233 37% 15%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-background text-foreground antialiased transition-colors duration-300;
+}
+
+a {
+  @apply text-accent underline-offset-4 transition-colors hover:text-accent/80;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: inherit;
+}
+
+.surface {
+  @apply rounded-xl border border-foreground/10 bg-[hsl(var(--surface))]/95 shadow-glass backdrop-blur-xl transition-colors duration-300 dark:border-white/5 dark:bg-[hsl(var(--surface))] dark:bg-opacity-90;
+}
