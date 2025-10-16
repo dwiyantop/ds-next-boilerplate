@@ -1,3 +1,4 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 
 import { buttonStyles, ThemeToggle } from '@/components/ui';
@@ -5,7 +6,7 @@ import { isFeatureEnabled } from '@/config/flags';
 import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, SOCIAL_LINKS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
-const NAV_LINKS = [
+const NAV_LINKS: { label: string; href: Route }[] = [
   { label: 'Components', href: '/showcase' },
   { label: 'Dashboard', href: '/dashboard' },
   { label: 'Flags', href: '/flags' },
@@ -75,7 +76,7 @@ export default function HomePage() {
             </nav>
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            <a
               href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noreferrer"
@@ -85,7 +86,7 @@ export default function HomePage() {
               )}
             >
               GitHub
-            </Link>
+            </a>
             <ThemeToggle />
           </div>
         </header>
@@ -104,7 +105,7 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Link
+              <a
                 href={SOCIAL_LINKS.github}
                 target="_blank"
                 rel="noreferrer"
@@ -114,8 +115,8 @@ export default function HomePage() {
                 )}
               >
                 Start New Project
-              </Link>
-              <Link
+              </a>
+              <a
                 href={SOCIAL_LINKS.docs}
                 target="_blank"
                 rel="noreferrer"
@@ -125,9 +126,9 @@ export default function HomePage() {
                 )}
               >
                 Read Documentation
-              </Link>
+              </a>
               {showChangelogCta && (
-                <Link
+                <a
                   href="https://github.com/your-org/dsnext/releases"
                   target="_blank"
                   rel="noreferrer"
@@ -137,7 +138,7 @@ export default function HomePage() {
                   )}
                 >
                   View Changelog
-                </Link>
+                </a>
               )}
             </div>
 
@@ -268,7 +269,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Link
+            <a
               href={SOCIAL_LINKS.github}
               target="_blank"
               rel="noreferrer"
@@ -278,8 +279,8 @@ export default function HomePage() {
               )}
             >
               Clone Repository
-            </Link>
-            <Link
+            </a>
+            <a
               href={SOCIAL_LINKS.docs}
               target="_blank"
               rel="noreferrer"
@@ -289,7 +290,7 @@ export default function HomePage() {
               )}
             >
               View Docs
-            </Link>
+            </a>
           </div>
         </section>
       </div>

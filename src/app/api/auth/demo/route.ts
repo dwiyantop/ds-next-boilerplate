@@ -2,7 +2,9 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  cookies().set({
+  const cookieStore = await cookies();
+
+  cookieStore.set({
     name: 'demo-auth',
     value: 'demo-auth-token',
     path: '/',

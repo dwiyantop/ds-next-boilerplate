@@ -35,12 +35,6 @@ let resource: Resource | null = null;
 let startupCounter: Counter | null = null;
 let metricReader: PeriodicExportingMetricReader | null = null;
 
-const getRetryOptions = () => ({
-  maxTimeout: 30_000,
-  maxAttempts: 5,
-  delay: 1_000,
-});
-
 const parseHeaders = (raw?: string | null): HeaderRecord | undefined => {
   if (!raw) {
     return undefined;
@@ -84,8 +78,6 @@ const createLogExporter = () => {
     return new OTLPLogExporter({
       url: resolveEndpoint('logs'),
       headers: parseHeaders(env.OTEL_EXPORTER_OTLP_HEADERS),
-      timeoutMillis: 10_000,
-      retryOptions: getRetryOptions(),
     });
   }
 
@@ -101,8 +93,6 @@ const createTraceExporter = () => {
     return new OTLPTraceExporter({
       url: resolveEndpoint('traces'),
       headers: parseHeaders(env.OTEL_EXPORTER_OTLP_HEADERS),
-      timeoutMillis: 10_000,
-      retryOptions: getRetryOptions(),
     });
   }
 
@@ -118,8 +108,6 @@ const createMetricExporter = () => {
     return new OTLPMetricExporter({
       url: resolveEndpoint('metrics'),
       headers: parseHeaders(env.OTEL_EXPORTER_OTLP_HEADERS),
-      timeoutMillis: 10_000,
-      retryOptions: getRetryOptions(),
     });
   }
 

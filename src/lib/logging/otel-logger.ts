@@ -1,4 +1,4 @@
-import { logs, SeverityNumber } from '@opentelemetry/api-logs';
+import { type AnyValueMap, logs, SeverityNumber } from '@opentelemetry/api-logs';
 
 import { appConfig } from '@/config/app';
 import { env } from '@/config/env';
@@ -28,7 +28,7 @@ const emit = (level: LogLevel, body: string, attributes?: LogAttributes) => {
 
   logger.emit({
     body,
-    attributes,
+    attributes: attributes as AnyValueMap | undefined,
     severityNumber: severity.number,
     severityText: severity.text,
     timestamp: Date.now() * 1_000_000, // convert ms to ns expected by spec

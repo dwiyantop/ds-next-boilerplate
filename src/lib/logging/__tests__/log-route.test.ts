@@ -1,20 +1,17 @@
+import { NextRequest } from 'next/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { POST } from '@/app/api/log/route';
 import * as otelLogger from '@/lib/logging/otel-logger';
 
 const mockRequest = (payload: unknown) =>
-  new Request('http://localhost/api/log', {
+  new NextRequest('http://localhost/api/log', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: { 'Content-Type': 'application/json' },
   });
 
-vi.mock('@/lib/logging/otel-logger', () => ({
-  logWithLevel: vi.fn(),
-}));
-
-const { logWithLevel } = otelLogger as { logWithLevel: ReturnType<typeof vi.fn> };
+const logSpy = vi.spyOn(otelLogger, 'logWithLevel').mockImplementation(() => {});
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -29,10 +26,10 @@ describe('POST /api/log', () => {
       stack: 'Error: boom',
     });
 
-    const response = await POST(request as unknown as Request);
+    const response = await POST(request);
 
     expect(response.status).toBe(204);
-    expect(logWithLevel).toHaveBeenCalledWith('error', 'Client crash', {
+    expect(logSpy).toHaveBeenCalledWith('error', 'Client crash', {
       page: '/dashboard',
       stack: 'Error: boom',
     });
@@ -41,9 +38,9 @@ describe('POST /api/log', () => {
   it('returns 400 for invalid payload', async () => {
     const request = mockRequest({ message: '' });
 
-    const response = await POST(request as unknown as Request);
+    const response = await POST(request);
 
     expect(response.status).toBe(400);
-    expect(logWithLevel).not.toHaveBeenCalled();
+    expect(logSpy).not.toHaveBeenCalled();
   });
 });

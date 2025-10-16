@@ -13,27 +13,17 @@ import { appConfig } from '@/config/app';
 let provider: WebTracerProvider | null = null;
 let meterProvider: MeterProvider | null = null;
 
-const getRetryOptions = () => ({
-  maxTimeout: 30_000,
-  maxAttempts: 5,
-  delay: 1_000,
-});
-
 const createExporter = () =>
   new OTLPTraceExporter({
     url:
       process.env.NEXT_PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT ??
       process.env.NEXT_PUBLIC_OTEL_EXPORTER_OTLP_ENDPOINT ??
       'http://localhost:4318/v1/traces',
-    timeoutMillis: 10_000,
-    retryOptions: getRetryOptions(),
   });
 
 const createMetricExporter = () =>
   new OTLPMetricExporter({
     url: process.env.NEXT_PUBLIC_OTEL_EXPORTER_OTLP_ENDPOINT ?? 'http://localhost:4318/v1/metrics',
-    timeoutMillis: 10_000,
-    retryOptions: getRetryOptions(),
   });
 
 export const initWebTracer = () => {
