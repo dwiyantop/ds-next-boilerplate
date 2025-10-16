@@ -54,11 +54,21 @@ jobs:
         run: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy to Vercel
-        uses: vercel/action@v2
+      - name: Pull Vercel environment
         if: success()
-        with:
-          token: ${{ secrets.VERCEL_TOKEN }}
-          org-id: ${{ secrets.VERCEL_ORG_ID }}
-          project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          production: true
+        run: pnpm dlx vercel@latest pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      - name: Build Vercel app
+        if: success()
+        run: pnpm dlx vercel@latest build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      - name: Deploy to Vercel
+        if: success()
+        run: pnpm dlx vercel@latest deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
