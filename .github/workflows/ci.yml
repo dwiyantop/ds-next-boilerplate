@@ -6,6 +6,19 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      target-branch:
+        description: 'Branch to release from'
+        required: true
+        default: 'main'
+      run-release:
+        description: 'Run semantic-release + Vercel deploy'
+        required: true
+        default: 'yes'
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,6 +26,7 @@ concurrency:
 
 jobs:
   build-and-test:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,10 +50,12 @@ jobs:
         run: pnpm build
 
   release:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run-release == 'yes'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target-branch }}
       - uses: pnpm/action-setup@v4
         with:
           version: 9.12.2
